@@ -78,7 +78,7 @@ if(isset($_GET['log_out'])){
           display list patient
         </div>
         <div class="col-md-3">
-          display encounters
+          display encounter
         </div>
     </div>
 </div>
