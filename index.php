@@ -1,32 +1,15 @@
 <?php
-/*session_start();
+session_start();
 $userid = NULL;
 $username = NULL;
 $usertype = NULL;
-if(isset($_GET['log_out'])){
-    unset($_SESSION['userid']);
-    unset($_SESSION['myusername']);
-    unset($_SESSION['usertype']);
-    header("Location: ".$_SERVER['PHP_SELF']);
-}elseif(isset($_POST['userid'])){
-    $_SESSION['userid'] = $_POST['userid'];
-    $_SESSION['myusername'] = $_POST['myusername'];
-    $_SESSION['usertype'] = $_POST['usertype'];
-    header("Location: user/");
-    //$userid = $_POST['userid'];
-    /*if ($_SESSION['usertype']=='admin') {
-        header("Location: admin/");
-    } else {
-        header("Location: user/");
-    }
-}elseif(isset($_SESSION['userid'])){
-    header("Location: user/");
-    /*if ($_SESSION['usertype']=='admin') {
-        header("Location: admin/");
-    } else {
-        header("Location: user/");
-    }
-}*/
+include_once 'fn/user_content_fn.php';
+if(isset($_SESSION['userid'])){
+    $userid = $_SESSION['userid'];
+    $username = $_SESSION['myusername'];
+    $usertype = $_SESSION['usertype'];
+}
+if ($username && $usertype == 'padsuser'){
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,9 +46,6 @@ if(isset($_GET['log_out'])){
                     <li class="nav-item">
                       <a class="nav-link mymenu" href="#" id="patient">Patient</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link mymenu" href="#" id="edit">Edit</a>
-                    </li>
                     <li class="right"><a href="../wgs-project/is?log_out=1" class="nav-link">Logout <i class="fa-solid fa-right-from-bracket fa-sm"></i></a></li>
                   </ul>
                 </div>
@@ -73,13 +53,8 @@ if(isset($_GET['log_out'])){
          </nav>
         </div>
     </div>
-    <div class="row p-4 pt-0 divdisplay">
-        <div class="col-md-9">
-          display list patient
-        </div>
-        <div class="col-md-3">
-          display encounter
-        </div>
+    <div class="row p-4 pt-0 mt-3 divdisplay">
+    <?php DisplayWelcome($username);?>
     </div>
 </div>
 <form class="user">
@@ -87,3 +62,9 @@ if(isset($_GET['log_out'])){
 </form>
 </body>
 </html>
+<?php
+  }else{
+    header("Location: 404/");
+    die();
+  }
+?>

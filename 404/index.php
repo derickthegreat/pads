@@ -53,7 +53,7 @@
         <h1>Sorry!</h1>
         <hr>
         <h6>You are not authorized to access this page.</h6>
-        <h6>Click here to <a href="../" title="">Proceed</a> to homepage.</h6>
+        <h6>Click here to <a href="../../wgs-project/is" title="">Proceed</a> to homepage.</h6>
     </div>
     
 </div>

@@ -9,6 +9,8 @@ $(document).ready(function(e){
 
 	$(document).on('submit','.user',function(event) {
 		event.preventDefault();
+		//alert ('here');
+		//test
 		var userSerialize = $('.user').serialize();
 		$.ajax({
             type: "POST",
@@ -19,6 +21,126 @@ $(document).ready(function(e){
             }
         });
 	});
-	
+
+	$(document).on('submit','.newpatient',function(event) {
+		event.preventDefault();
+		var userSerialize = $('.newpatient').serialize();
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: userSerialize,
+            success: function(msg){
+                $(".divdisplay").html(msg);
+            }
+        });
+	});
+
+	$(document).on('keyup', '.lname', function(event) {
+		event.preventDefault();
+		//alert($('.lname').val() + $('.fname').val() + $('.mname').val());
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: 'lname=' + $('.lname').val() + '&fname=' + $('.fname').val() + '&mname=' + $('.mname').val() + '&action=searchpatient' ,
+            success: function(msg){
+                $(".displayPatientSearch").html(msg);
+            }
+        }); 
+	});
+
+	$(document).on('keyup', '.fname', function(event) {
+		event.preventDefault();
+		//alert($('.lname').val() + $('.fname').val() + $('.mname').val());
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: 'lname=' + $('.lname').val() + '&fname=' + $('.fname').val() + '&mname=' + $('.mname').val() + '&action=searchpatient' ,
+            success: function(msg){
+                $(".displayPatientSearch").html(msg);
+            }
+        }); 
+	});
+
+	$(document).on('keyup', '.mname', function(event) {
+		event.preventDefault();
+		//alert($('.lname').val() + $('.fname').val() + $('.mname').val());
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: 'lname=' + $('.lname').val() + '&fname=' + $('.fname').val() + '&mname=' + $('.mname').val() + '&action=searchpatient' ,
+            success: function(msg){
+                $(".displayPatientSearch").html(msg);
+            }
+        }); 
+	});
+
+	$(document).on('click','.addpatient',function(event) {
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: 'action=addpatient&ifupdate=' + $(this).attr('id'),
+            success: function(msg){
+                $(".divdisplay").html(msg);
+            }
+        }); 
+	});
+
+	$(document).on('click','.back',function(event) {
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: 'action=patient' ,
+            success: function(msg){
+                $(".divdisplay").html(msg);
+            }
+        }); 
+	});
+
+	$(document).on('submit','.form-addnew',function(event) {
+  
+  	event.preventDefault();
+  	var userSerialize = $(this).serialize();
+
+		$.ajax({
+	    type: "POST",
+	    url: "fn/user_postback_fn.php",
+	    data: userSerialize,
+	    success: function(msg){
+	    	  console.log(msg);
+		    	var array = JSON.parse(msg);
+		      $(".alert-here").html(array['result']);
+		      if (array['success']=='new') {
+		      	$('.input-data').removeClass('is-valid');
+		      	$('.input-data').val('');
+		      	$('.hidbdate').val('0000-00-00');
+		      }else if(array['success']=='old'){
+		      	$('.input-data').removeClass('is-valid');
+		      }
+	    	}
+    	});
+  	});
+
+  	$(document).on('change','#bdate',function(event) {
+		if($(this).val()){
+			$('.hidbdate').val($(this).val());
+		}else{
+			$('.hidbdate').val('0000-00-00');
+		}
+	});
+
+	$(document).on('click','.imgedit',function(event) {
+  	//console.log('action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id'));
+  	var action = 'action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id');
+  	//$('.user').submit();
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: action,
+            success: function(msg){
+                $(".divdisplay").html(msg);
+            }
+        }); 
+	});
+
 /*end*/
 });

@@ -1,3 +1,3 @@
 <IfModule mod_rewrite.c>
-  ErrorDocument 404 http://localhost/wgs-project/is/404
+  ErrorDocument 404 http://localhost/pads/404
 </IfModule>

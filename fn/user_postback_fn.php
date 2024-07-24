@@ -1,11 +1,23 @@
 <?php
+session_start();
 include_once 'user_content_fn.php';
 include_once 'db_fn.php';
 $dataArray = array();
 
 if ($_POST['action'] == 'home') {
-	DisplayHome('Derick');
+	DisplayWelcome($_SESSION['myusername']);
+}elseif($_POST['action'] == 'patient'){
+	DisplayPatientList();
+}elseif($_POST['action'] == 'searchpatient'){
+	DisplayPatientListTable(SearchPatient($_POST['lname'],$_POST['fname'],$_POST['mname']));
+}elseif($_POST['action'] == 'addpatient'){
+	DisplayAddPatient(0);
+}elseif($_POST['action'] == 'editpatient'){
+	DisplayAddPatient($_POST['dataid']);
+}elseif($_POST['action'] == 'addnewpatient' || $_POST['action'] == 'updatepatient'){
+	$dataArray = [$_POST['fname'],$_POST['mname'],$_POST['lname'],$_POST['suffix'],$_POST['bdate'],$_POST['dataid']];
+	echo json_encode(UpdatePatient($dataArray));
 }else{
-	echo "none";
+	echo 'none';
 }
 ?>
