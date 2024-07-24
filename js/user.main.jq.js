@@ -128,10 +128,11 @@ $(document).ready(function(e){
 		}
 	});
 
+  	//add,edit patient
 	$(document).on('click','.imgedit',function(event) {
-  	//console.log('action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id'));
-  	var action = 'action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id');
-  	//$('.user').submit();
+  		//console.log('action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id'));
+  		var action = 'action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id');
+  		//$('.user').submit();
 		$.ajax({
             type: "POST",
             url: "fn/user_postback_fn.php",
@@ -140,6 +141,24 @@ $(document).ready(function(e){
                 $(".divdisplay").html(msg);
             }
         }); 
+	});
+
+	//delete patient account
+	$(document).on('click','.imgdel',function(event) {
+		if (confirm('Are you sure to delete '+$(this).closest('tr').attr('id')+' '+$(this).attr('id')+'?')) {
+	    	//console.log($(this).closest('td').attr('id')+'&dataid='+$(this).attr('id'));
+			var action = 'action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id');
+	    	//global_action = $(this).closest('td').attr('id')+'&dataid='+$(this).attr('id');
+	    	//$('.user').submit();
+	    	$.ajax({
+	            type: "POST",
+	            url: "fn/user_postback_fn.php",
+	            data: action,
+	            success: function(msg){
+	                $(".divdisplay").html(msg);
+	            }
+	        }); 
+		}
 	});
 
 /*end*/

@@ -122,4 +122,15 @@ function GetPatientInfo($dataid){
   mysqli_close($conn);
   return $dataarray;
 }
+
+function DeletePatient($dataid){
+  $conn = ConnectDB('pads_db');
+  $sql_user = 'DELETE FROM patient WHERE id='.$dataid;
+  if (mysqli_query($conn, $sql_user)) {
+    //echo "Record deleted successfully";
+  } else {
+    //echo "Error deleting record: " . mysqli_error($conn);
+  }
+  mysqli_close($conn);
+}
 ?>

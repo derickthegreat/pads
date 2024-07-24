@@ -17,6 +17,10 @@ if ($_POST['action'] == 'home') {
 }elseif($_POST['action'] == 'addnewpatient' || $_POST['action'] == 'updatepatient'){
 	$dataArray = [$_POST['fname'],$_POST['mname'],$_POST['lname'],$_POST['suffix'],$_POST['bdate'],$_POST['dataid']];
 	echo json_encode(UpdatePatient($dataArray));
+}elseif($_POST['action'] == 'delpatient'){
+	DeletePatient($_POST['dataid']);
+	DisplayPatientList();
+	//echo json_encode(UpdatePatient($dataArray));
 }else{
 	echo 'none';
 }

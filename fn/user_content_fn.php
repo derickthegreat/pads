@@ -66,7 +66,7 @@ function DisplayPatientListTable($dataarray){
 		  	foreach ($dataarray as $data) {
 		  		if($data['haspatient']){
 		  	?>
-		    <tr id="product">
+		    <tr id="patient">
 		      <th scope="row"><?php echo $data['id'];?></th>
 		      <td scope="row"><?php echo $data['lname'];?></th>
 		      <td scope="row"><?php echo $data['fname'];?></th>
