@@ -75,10 +75,10 @@ if(isset($_GET['log_out'])){
     </div>
     <div class="row p-4 pt-0 divdisplay">
         <div class="col-md-9">
-          1 of 2
+          display list patient
         </div>
         <div class="col-md-3">
-          2 of 2
+          display encounters
         </div>
     </div>
 </div>
