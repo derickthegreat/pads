@@ -1,4 +1,5 @@
 <?php
+//session_start();
 include_once 'encrypt_fn.php';
 function ConnectDB($database){
     $servername = "localhost";
@@ -25,11 +26,11 @@ function GetPatientList(){
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
     while( $row = mysqli_fetch_assoc( $result)){
-      $row += ["haspatient" => 1]; 
+      $row += ["hasdata" => 1]; 
       $new_array[] = $row; // Inside while loop
     }
   }else{
-    $new_array[] = ["haspatient"=> 0,"result"=>"no records found"]; // Inside while loop
+    $new_array[] = ["hasdata"=> 0,"result"=>"no records found"]; // Inside while loop
   }
   mysqli_close($conn);
   return $new_array;
@@ -41,11 +42,11 @@ function SearchPatient($lname,$fname,$mname){
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
     while( $row = mysqli_fetch_assoc( $result)){
-      $row += ["haspatient" => 1]; 
+      $row += ["hasdata" => 1]; 
       $new_array[] = $row; // Inside while loop
     }
   }else{
-    $new_array[] = ["haspatient"=> 0,"result"=>"no records found"]; // Inside while loop
+    $new_array[] = ["hasdata"=> 0,"result"=>"no records found"]; // Inside while loop
   }
   mysqli_close($conn);
   return $new_array;
@@ -133,4 +134,73 @@ function DeletePatient($dataid){
   }
   mysqli_close($conn);
 }
+
+function GetPatientStatus($dataid){
+  $dataarray = array();
+  $conn = ConnectDB('pads_db');
+  $sql = 'SELECT * FROM `patient` A, `patient_status` B WHERE A.id = B.patient_id AND B.patient_id ='. $dataid .' ORDER BY `time_admitted` DESC LIMIT 1';
+  $result = mysqli_query($conn, $sql);
+
+  if (mysqli_num_rows($result) > 0) {
+  // output data of each row
+      while($row = mysqli_fetch_assoc($result)) {
+  /*            $row += ["access" => 1];
+              $row += ["usertype" => 'admin'];*/
+              $row += ["hasdata" => 1];
+              $dataarray = $row;
+
+      }
+  } else {
+      $dataarray = ['hasdata' => 0,
+      'result' =>
+      '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+       <strong>Product not found.</strong> Kindly contact admin to add product.
+       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>'
+      ];
+  }
+  mysqli_close($conn);
+  return $dataarray;
+}
+
+function AddPatientStatus($patientid,$isadmitted,$enteredby){
+  $conn = ConnectDB('pads_db');
+  $sql = 'INSERT INTO patient_status (patient_id,is_admitted,entered_by) VALUES ('.$patientid.','.$isadmitted.',"'.$enteredby.'")';
+
+  if (mysqli_query($conn, $sql)) {
+    $arrayresult = ['success'=>'yes',
+        'result'=>'<div class="alert alert-success alert-dismissible fade show">
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                      <strong>Success!</strong> Patient Admission updated succesfully.
+                    </div>'];
+  }else{
+    //echo mysqli_error($conn);
+    $arrayresult = ['success'=>'non',
+        'result'=>'<div class="alert alert-warning alert-dismissible fade show" role="alert">
+         <strong>Unsuccessful.</strong> Error on updating product.
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>'];
+    }
+  mysqli_close($conn);
+
+  return $arrayresult;
+}
+
+function GetPatientEncounter($dataid){
+  $conn = ConnectDB('pads_db');
+  $sql = 'SELECT * FROM `patient_encounter` A, `patient_status` B WHERE A.ps_id = B.id AND A.patient_id ='. $dataid;
+  //$sql = 'SELECT * FROM '.$datatb;
+  $result = mysqli_query($conn, $sql);
+  if (mysqli_num_rows($result) > 0) {
+    while( $row = mysqli_fetch_assoc( $result)){
+      $row += ["hasdata" => 1]; 
+      $new_array[] = $row; // Inside while loop
+    }
+  }else{
+    $new_array[] = ["hasdata"=> 0,"result"=>"no records found"]; // Inside while loop
+  }
+  mysqli_close($conn);
+  return $new_array;
+}
+
 ?>

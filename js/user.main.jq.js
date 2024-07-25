@@ -161,5 +161,107 @@ $(document).ready(function(e){
 		}
 	});
 
+	//view patient
+	$(document).on('click','.imgview',function(event) {
+  		//console.log('action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id'));
+  		var action = 'action='+$(this).closest('td').attr('id')+'&dataid='+$(this).attr('id');
+  		//$('.user').submit();
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: action,
+            success: function(msg){
+                $(".divdisplay").html(msg);
+            }
+        }); 
+	});
+
+	$(document).on('click','.admit',function(event) {
+		if (confirm('Are you sure to admit patient '+$(this).attr('id')+'?')) {
+			$('.isadmitted').val(1);
+	    	$('.form-addstatus').submit();
+	    	/*$.ajax({
+	            type: "POST",
+	            url: "fn/user_postback_fn.php",
+	            data: action,
+	            success: function(msg){
+	                $(".divdisplay").html(msg);
+	            }
+	        });*/ 
+		}
+	});
+	$(document).on('click','.discharge',function(event) {
+		if (confirm('Are you sure to discharge patient '+$(this).attr('id')+'?')) {
+			$('.isadmitted').val(0);
+	    	$('.form-addstatus').submit();
+	    	/*$.ajax({
+	            type: "POST",
+	            url: "fn/user_postback_fn.php",
+	            data: action,
+	            success: function(msg){
+	                $(".divdisplay").html(msg);
+	            }
+	        });*/ 
+		}
+	});
+
+	$(document).on('submit','.form-addstatus',function(event) {
+  
+  	event.preventDefault();
+  	var userSerialize = $(this).serialize();
+
+		$.ajax({
+	    type: "POST",
+	    url: "fn/user_postback_fn.php",
+	    data: userSerialize,
+	    success: function(msg){
+	    	  console.log(msg);
+		    	var array = JSON.parse(msg);
+		      $(".alert-herea").html(array['result']);
+		      $('.form-displaypatient').submit();
+/*		      if (array['success']=='new') {
+		      	$('.input-data').removeClass('is-valid');
+		      	$('.input-data').val('');
+		      	$('.hidbdate').val('0000-00-00');
+		      }else if(array['success']=='old'){
+		      	$('.input-data').removeClass('is-valid');
+		      }*/
+	    	}
+	   	});
+  	});
+
+  	$(document).on('submit','.form-displaypatient',function(event) {
+  
+  	event.preventDefault();
+  	var userSerialize = $(this).serialize();
+
+		$.ajax({
+	    type: "POST",
+	    url: "fn/user_postback_fn.php",
+	    data: userSerialize,
+	    success: function(msg){
+                $(".divdisplay").html(msg);
+            }
+	   	});
+  	});
+
+  	$(document).on('click','.addencounter',function(event) {
+		$('.form-addencounter').submit();
+	});
+
+	$(document).on('submit','.form-addencounter',function(event) {
+		event.preventDefault();
+  		var userSerialize = $(this).serialize();
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: userSerialize,
+            success: function(msg){
+                $(".divdisplay").html(msg);
+            }
+        }); 
+	});
+
+
 /*end*/
 });

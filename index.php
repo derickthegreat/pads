@@ -32,9 +32,12 @@ if ($username && $usertype == 'padsuser'){
     <div class="row p-4 pb-0">
         <div class="col">
           <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+            <a class="navbar-brand" href="#">
+              <img src="img/BGHMC-trans.png" width="30" height="30" alt="" class="m-1">
+              PADS
+            </a>
             <!-- Navbar content -->
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">PatientAdmiting/DischargeSystem</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -53,6 +56,8 @@ if ($username && $usertype == 'padsuser'){
          </nav>
         </div>
     </div>
+    <div class="alert-herea pb-0 p-1 mb-0">
+      </div>
     <div class="row p-4 pt-0 mt-3 divdisplay">
     <?php DisplayWelcome($username);?>
     </div>

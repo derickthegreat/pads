@@ -21,6 +21,12 @@ if ($_POST['action'] == 'home') {
 	DeletePatient($_POST['dataid']);
 	DisplayPatientList();
 	//echo json_encode(UpdatePatient($dataArray));
+}elseif($_POST['action'] == 'viewpatient'){
+	DisplayPatienEncounter($_POST['dataid']);
+}elseif($_POST['action'] == 'addstatus'){
+	echo json_encode(AddPatientStatus($_POST['dataid'],$_POST['isadmitted'],$_POST['userid']));
+}elseif($_POST['action'] == 'addencounter'){
+	DisplayAddEncounter(0);
 }else{
 	echo 'none';
 }

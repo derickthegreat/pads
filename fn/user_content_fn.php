@@ -1,4 +1,5 @@
 <?php
+//session_start();
 include_once 'db_fn.php';
 
 function DisplayWelcome($username){
@@ -35,11 +36,6 @@ function DisplayPatientList(){
 				</div>
 	    </div>
 	  </div>
-	  <div class="col-md-12 p-0">
-	    <div class="col-sm-12 p-0 border border-1">
-				<div class="p-2 mb-0 bg-secondary text-white">Encounter 'click patient'</div>
-	    </div>
-	  </div>
 	</div>
 
 <?php
@@ -57,6 +53,7 @@ function DisplayPatientListTable($dataarray){
 		      <th scope="col">middle name</th>
 		      <th scope="col">suffix</th>
 		      <th scope="col">birthday</th>
+		      <th scope="col" class="text-end">View</th>
 		      <th scope="col" class="text-end">Edit</th>
 		      <th scope="col" class="text-end">✖</th>
 		    </tr>
@@ -64,7 +61,7 @@ function DisplayPatientListTable($dataarray){
 	  <tbody>
 	  	<?php
 		  	foreach ($dataarray as $data) {
-		  		if($data['haspatient']){
+		  		if($data['hasdata']){
 		  	?>
 		    <tr id="patient">
 		      <th scope="row"><?php echo $data['id'];?></th>
@@ -73,7 +70,8 @@ function DisplayPatientListTable($dataarray){
 		      <td scope="row"><?php echo $data['mname'];?></th>
 		      <td scope="row"><?php echo $data['suffname'];?></th>
 		      <td scope="row"><?php echo $data['birthdate'];?></th>
-		      <td class="text-end" id="editpatient"><img class="imgedit productrow" id="<?php echo $data['id'];?>" src="img/edit.png" alt="edit"></td>
+  		      <td class="text-end" id="viewpatient"><img class="imgview" id="<?php echo $data['id'];?>" src="img/checklist.png" alt="del"></td>
+		      <td class="text-end" id="editpatient"><img class="imgedit" id="<?php echo $data['id'];?>" src="img/edit.png" alt="edit"></td>
 		      <td class="text-end" id="delpatient"><img class="imgdel" id="<?php echo $data['id'];?>" src="img/delete.png" alt="del"></td>
 		    </tr>
 		  <?php 
@@ -92,12 +90,208 @@ function DisplayAddPatient($ifupdate){
  <div class="row justify-content-md-center">
   <div class="col col-lg-6">
 	  <div class="col-sm-12 p-0 border border-1">
-	    <h4 class="p-2 mb-0 bg-info text-white"><?php if($ifupdate){echo 'Update Product';}else{echo 'Add New Product';}?></h4>
+	    <h4 class="p-2 mb-0 bg-info text-white"><?php if($ifupdate){echo 'Update Patient';}else{echo 'Add New Patient';}?></h4>
 	    <div class="alert-here pb-0 p-1 mb-0">
 	    </div>	
 			<form class="row g-3 pt-0 p-1 m-0 form-addnew">
 					<input type="hidden" name="action" value="<?php if($ifupdate){echo 'updatepatient';}else{echo 'addnewpatient';}?>">
 					<input type="hidden" name="dataid" value="<?php if($ifupdate){echo $ifupdate;}else{echo 0;}?>">
+
+				  <div class="col-md-12">
+				    <label for="fname" class="form-label">First Name</label>
+				    <input type="text" class="form-control input-data fname" id="fname" name="fname" placeholder="First Name" value="<?php if($ifupdate){echo $dataarray['fname'];}?>" required>
+				    <div class="valid-feedback">
+				      Looks good!
+				    </div>
+				    <div class="invalid-feedback">
+			        Please provide user name.
+				    </div>
+				  </div>
+				  <div class="col-md-12">
+				    <label for="mname" class="form-label">Middle Name</label>
+				    <input type="text" class="form-control input-data mname" id="mname" name="mname" placeholder="Middle Name" value="<?php if($ifupdate){echo $dataarray['mname'];}?>" required>
+				    <div class="valid-feedback">
+				      Looks good!
+				    </div>
+				    <div class="invalid-feedback">
+			        Please provide user name.
+				    </div>
+				  </div>
+				  <div class="col-md-12">
+				    <label for="lname" class="form-label">Last Name</label>
+				    <input type="text" class="form-control input-data lname" id="lname" name="lname" placeholder="Last Name" value="<?php if($ifupdate){echo $dataarray['lname'];}?>" required>
+				    <div class="valid-feedback">
+				      Looks good!
+				    </div>
+				    <div class="invalid-feedback">
+			        Please provide user name.
+				    </div>
+				  </div>
+				  <div class="col-md-2">
+				    <label for="suffix" class="form-label">Suffix</label>
+				    <select class="form-select input-data" name="suffix" id="suffix">
+				      <option value=" " disabled>eg. Sr, Jr</option>
+				      <option value=" "></option>
+				      <option value="Sr" <?php if($ifupdate){if($dataarray['suffname']=='Sr'){echo 'selected';}}?>>Sr</option>
+				      <option value="Jr" <?php if($ifupdate){if($dataarray['suffname']=='Jr'){echo 'selected';}}?>>Jr</option>
+				      <option value="II" <?php if($ifupdate){if($dataarray['suffname']=='II'){echo 'selected';}}?>>II</option>
+				      <option value="III" <?php if($ifupdate){if($dataarray['suffname']=='III'){echo 'selected';}}?>>III</option>
+				      <option value="Iv" <?php if($ifupdate){if($dataarray['suffname']=='IV'){echo 'selected';}}?>>IV</option>
+				    </select>
+				  </div>
+				  <div class="col-md-5">
+				    <label for="bdate" class="form-label">Birth Date</label>
+				    <!-- <input type="hidden" name="hidbdate" value="0000-00-00"> -->
+				    <div class="input-group has-validation">
+				      <span class="input-group-text" id="inputGroupPrepend3" style="font-size: 15px;">📅</span>
+				      <input type="date" class="form-control input-data" id="bdate" name="bdate" value="<?php if($ifupdate){echo $dataarray['birthdate'];}?>" aria-describedby="validationServer03Feedback" required>
+				        <div class="valid-feedback">
+				          Looks good!
+				        </div>
+				        <div class="invalid-feedback">
+				          Input valid date.
+				        </div>
+				    </div>
+				  </div>			  
+				  <div class="col-12">
+				    <button class="btn btn-primary submit-user add" type="submit"><?php if($ifupdate){echo 'Update';}else{echo 'Add';}?></button>
+				    <button type="button" class="btn btn-secondary back">Back</button>
+				  </div>
+			</form>
+		</div>
+	</div>
+</div>
+<?php
+}
+
+function DisplayPatienEncounter($dataid){
+	$dataarray = GetPatientInfo($dataid);
+	$psarray = GetPatientStatus($dataid);
+	$date= new DateTime($dataarray['birthdate']);
+
+ 	$bday = new DateTime(date_format($date,"m/d/Y")); // Your date of birth
+	$today = new Datetime(date('m/d/y'));
+	$diff = $today->diff($bday);
+
+	if(!$psarray['hasdata']){
+		AddPatientStatus($dataid,0,$_SESSION['myusername']);
+		$psarray = GetPatientStatus($dataid);
+	}
+?>
+<div class="col-md-12 p-0">
+	<div class="col-sm-12 p-0 border border-1">
+		<div class="p-2 mb-0 bg-secondary text-white">
+			<div class="row">
+			<div class="col-2">
+				Patient ID: <?php echo $dataarray['id'];?>
+			</div>
+			<div class="col-3">
+				<strong><?php echo $dataarray['lname'].', '.$dataarray['fname'].' '.$dataarray['suffname'].', '.$dataarray['mname'];?></strong>
+			</div>
+			<div class="col-2">
+				<strong><?php echo date_format($date,"m/d/Y").' Age: '; printf('%d', $diff->y);?></strong>
+			</div>
+			<div class="col-5">
+				<div class="row">
+					<div class="col-8">
+					<?php if($psarray['is_admitted']){echo 'Admitted: '. $psarray['time_admitted'];}else{ echo 'Last Admitted: '.$psarray['time_admitted'];}?>	
+					</div>
+					<div class="col-4">
+					<?php if($psarray['is_admitted'] == 0){?><button type="button" class="admit btn btn-primary" id="<?php echo $dataid;?>">Admit</button><?php }else{?><button type="button" class="discharge btn btn-primary" id="<?php echo $dataid;?>">Discharge</button><?php }?>
+					</div>
+				</div>
+			</div>      
+			</div>
+		</div>
+	</div>
+</div>
+<form class="form-addstatus">
+	<input type="hidden" name="userid" class="userid" value="<?php echo $_SESSION['myusername'];?>">
+	<input type="hidden" name="dataid" class="dataid" value="<?php echo $dataid;?>">
+	<input type="hidden" name="action" value="addstatus">
+	<input type="hidden" name="isadmitted" class="isadmitted" value="">
+</form>
+<form class="form-displaypatient">
+	<input type="hidden" name="dataid" class="dataid" value="<?php echo $dataid;?>">
+	<input type="hidden" name="action" value="viewpatient">
+</form>
+<form class="form-addencounter">
+	<input type="hidden" name="userid" class="userid" value="<?php echo $_SESSION['myusername'];?>">
+	<input type="hidden" name="dataid" class="dataid" value="<?php echo $dataid;?>">
+	<input type="hidden" name="action" value="addencounter">
+	<input type="hidden" name="isadmitted" class="psid" value="<?php echo $psarray['id'];?>">
+</form>
+<?php
+DisplayPatientEncounter($dataid);
+}
+
+function DisplayPatientEncounterList($dataarray){
+?>
+
+	<table class="table table-hover">
+			<thead class="table-primary">
+			  <tr>
+		      <th scope="col">Date/Time</th>
+		      <th scope="col">Encounter</th>
+		      <th scope="col">Is Admitted</th>
+		      <th scope="col">Entered By</th>
+		    </tr>
+	  	</thead>
+	  <tbody>
+	  	<?php
+		  	foreach ($dataarray as $data) {
+		  		if($data['hasdata']){
+		  	?>
+		    <tr id="patient">
+		      <th scope="row"><?php echo $data['time'];?></th>
+		      <td scope="row"><?php echo $data['encounter'];?></th>
+		      <td scope="row"><?php echo $data['is_admitted'];?></th>
+		      <td scope="row"><?php echo $data['entered_by'];?></th>
+		    </tr>
+		  <?php 
+				}else{
+					echo 'no record found';
+				}
+			}?>
+	  </tbody>
+	</table>
+	<?php
+}
+
+function DisplayPatientEncounter($dataid){
+?>
+	
+	<div class='row'>
+	  <div class="col-md-12 p-0">
+	  	<div class="col-sm-12 p-0 border border-1">
+	  		<div class="row m-0">
+	  			<div class="p-2 mb-0 bg-secondary text-white col-md-10">Patient Encounter</div>
+					<div class="col-md-2 text-center"><button type="button" class="btn btn-primary addencounter m-1" name="addencounter" id="0">Add Encounter</button></div>
+	  		</div>
+				<div class="col table displayPatientSearch">
+					<?php DisplayPatientEncounterList(GetPatientEncounter($dataid)); ?>
+				</div>
+	    </div>
+	  </div>
+	</div>
+
+<?php
+}
+
+function DisplayAddPatient($ifupdate,$dataid,$userid){
+	$dataarray = GetPatientEncounter($ifupdate);
+?>
+ <div class="row justify-content-md-center">
+  <div class="col col-lg-6">
+	  <div class="col-sm-12 p-0 border border-1">
+	    <h4 class="p-2 mb-0 bg-info text-white"><?php if($ifupdate){echo 'Update Encounter';}else{echo 'Add New Encounter';}?></h4>
+	    <div class="alert-here pb-0 p-1 mb-0">
+	    </div>	
+			<form class="row g-3 pt-0 p-1 m-0 form-addnew">
+					<input type="hidden" name="action" value="<?php if($ifupdate){echo 'updateencouter';}else{echo 'addencounter';}?>">
+					<input type="hidden" name="dataid" value="<?php echo $dataid;?>">
+					<input type="hidden" name="id" value="<?php if($ifupdate){echo $ifupdate;}else{echo 0;}?>">
+					<input type="hidden" name="userid" value="<?php echo $userid;?>">
 
 				  <div class="col-md-12">
 				    <label for="fname" class="form-label">First Name</label>
