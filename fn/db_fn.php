@@ -203,4 +203,48 @@ function GetPatientEncounter($dataid){
   return $new_array;
 }
 
+function UpdateEncounter($profilearray){
+    $arrayresult = array();
+    $conn = ConnectDB('pads_db');
+    if(!$profilearray[0]){
+      $sql = 'INSERT INTO patient_encounter (patient_id,ps_id,encounter,entered_by) 
+                          VALUES ('.$profilearray[1].','.$profilearray[2].',"'.$profilearray[3].'","'.$profilearray[3].'")';
+    }else{
+      $sql = 'UPDATE patient SET fname="'.$profilearray[0].'",mname="'.$profilearray[1].'",lname="'.$profilearray[2].'",
+              suffname="'.$profilearray[3].'",birthdate="'.$profilearray[4].'" WHERE id ='.$profilearray[5];      
+    }
+
+    if (mysqli_query($conn, $sql)) {
+      if($profilearray[0]){
+        $arrayresult = ['success'=>'old',
+        'result'=>'<div class="alert alert-success alert-dismissible fade show">
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                      <strong>Success!</strong> Patient Encounter updated succesfully.
+                    </div>'];
+      }else{
+        $arrayresult = ['success'=>'new',
+        'result'=>'<div class="alert alert-success alert-dismissible fade show">
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                      <strong>Success!</strong> Patient Encounter added succesfully.
+                    </div>'];
+      }
+      /*$arrayresult = ['success'=>1,
+        'result'=>'<div class="alert alert-success alert-dismissible fade show">
+                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                      <strong>Success!</strong> Product updated succesfully.
+                    </div>'];*/
+    }else{
+        //echo mysqli_error($conn);
+      $arrayresult = ['success'=>'non',
+        'result'=>'<div class="alert alert-warning alert-dismissible fade show" role="alert">
+         <strong>Unsuccessful.</strong> Error on updating product.
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>'];
+    }
+
+    mysqli_close($conn);
+
+    return $arrayresult;
+}
+
 ?>

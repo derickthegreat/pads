@@ -257,6 +257,17 @@ $(document).ready(function(e){
             url: "fn/user_postback_fn.php",
             data: userSerialize,
             success: function(msg){
+                $(".disencounter").html(msg);
+            }
+        }); 
+	});
+
+	$(document).on('click','.backpatient',function(event) {
+		$.ajax({
+            type: "POST",
+            url: "fn/user_postback_fn.php",
+            data: 'action=viewpatient&dataid=' + $(this).attr('id') ,
+            success: function(msg){
                 $(".divdisplay").html(msg);
             }
         }); 

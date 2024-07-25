@@ -180,7 +180,7 @@ function DisplayPatienEncounter($dataid){
 ?>
 <div class="col-md-12 p-0">
 	<div class="col-sm-12 p-0 border border-1">
-		<div class="p-2 mb-0 bg-secondary text-white">
+		<div class="p-3 mb-0 bg-secondary text-white">
 			<div class="row">
 			<div class="col-2">
 				Patient ID: <?php echo $dataarray['id'];?>
@@ -203,6 +203,9 @@ function DisplayPatienEncounter($dataid){
 			</div>      
 			</div>
 		</div>
+		<div class="col-sm-12 p-3 disencounter">
+		<?php DisplayPatientEncounter($dataid);?>
+		</div>
 	</div>
 </div>
 <form class="form-addstatus">
@@ -219,15 +222,14 @@ function DisplayPatienEncounter($dataid){
 	<input type="hidden" name="userid" class="userid" value="<?php echo $_SESSION['myusername'];?>">
 	<input type="hidden" name="dataid" class="dataid" value="<?php echo $dataid;?>">
 	<input type="hidden" name="action" value="addencounter">
-	<input type="hidden" name="isadmitted" class="psid" value="<?php echo $psarray['id'];?>">
+	<input type="hidden" name="psid" class="psid" value="<?php echo $psarray['id'];?>">
 </form>
 <?php
-DisplayPatientEncounter($dataid);
 }
 
 function DisplayPatientEncounterList($dataarray){
 ?>
-
+	
 	<table class="table table-hover">
 			<thead class="table-primary">
 			  <tr>
@@ -245,7 +247,7 @@ function DisplayPatientEncounterList($dataarray){
 		    <tr id="patient">
 		      <th scope="row"><?php echo $data['time'];?></th>
 		      <td scope="row"><?php echo $data['encounter'];?></th>
-		      <td scope="row"><?php echo $data['is_admitted'];?></th>
+		      <td scope="row"><?php if($data['is_admitted'] == 0){echo 'NO';}else{ echo 'YES';};?></th>
 		      <td scope="row"><?php echo $data['entered_by'];?></th>
 		    </tr>
 		  <?php 
@@ -278,7 +280,7 @@ function DisplayPatientEncounter($dataid){
 <?php
 }
 
-function DisplayAddPatient($ifupdate,$dataid,$userid){
+function DisplayAddEncounter($ifupdate,$dataid,$userid,$psid){
 	$dataarray = GetPatientEncounter($ifupdate);
 ?>
  <div class="row justify-content-md-center">
@@ -288,70 +290,19 @@ function DisplayAddPatient($ifupdate,$dataid,$userid){
 	    <div class="alert-here pb-0 p-1 mb-0">
 	    </div>	
 			<form class="row g-3 pt-0 p-1 m-0 form-addnew">
-					<input type="hidden" name="action" value="<?php if($ifupdate){echo 'updateencouter';}else{echo 'addencounter';}?>">
+					<input type="hidden" name="action" value="<?php if($ifupdate){echo 'updateencounter';}else{echo 'addnewencounter';}?>">
+					<input type="hidden" name="encounterid" value="<?php if($ifupdate){echo $ifupdate;}else{echo 0;}?>">
 					<input type="hidden" name="dataid" value="<?php echo $dataid;?>">
-					<input type="hidden" name="id" value="<?php if($ifupdate){echo $ifupdate;}else{echo 0;}?>">
+					<input type="hidden" name="psid" value="<?php echo $psid;?>">
 					<input type="hidden" name="userid" value="<?php echo $userid;?>">
 
 				  <div class="col-md-12">
-				    <label for="fname" class="form-label">First Name</label>
-				    <input type="text" class="form-control input-data fname" id="fname" name="fname" placeholder="First Name" value="<?php if($ifupdate){echo $dataarray['fname'];}?>" required>
-				    <div class="valid-feedback">
-				      Looks good!
-				    </div>
-				    <div class="invalid-feedback">
-			        Please provide user name.
-				    </div>
-				  </div>
-				  <div class="col-md-12">
-				    <label for="mname" class="form-label">Middle Name</label>
-				    <input type="text" class="form-control input-data mname" id="mname" name="mname" placeholder="Middle Name" value="<?php if($ifupdate){echo $dataarray['mname'];}?>" required>
-				    <div class="valid-feedback">
-				      Looks good!
-				    </div>
-				    <div class="invalid-feedback">
-			        Please provide user name.
-				    </div>
-				  </div>
-				  <div class="col-md-12">
-				    <label for="lname" class="form-label">Last Name</label>
-				    <input type="text" class="form-control input-data lname" id="lname" name="lname" placeholder="Last Name" value="<?php if($ifupdate){echo $dataarray['lname'];}?>" required>
-				    <div class="valid-feedback">
-				      Looks good!
-				    </div>
-				    <div class="invalid-feedback">
-			        Please provide user name.
-				    </div>
-				  </div>
-				  <div class="col-md-2">
-				    <label for="suffix" class="form-label">Suffix</label>
-				    <select class="form-select input-data" name="suffix" id="suffix">
-				      <option value=" " disabled>eg. Sr, Jr</option>
-				      <option value=" "></option>
-				      <option value="Sr" <?php if($ifupdate){if($dataarray['suffname']=='Sr'){echo 'selected';}}?>>Sr</option>
-				      <option value="Jr" <?php if($ifupdate){if($dataarray['suffname']=='Jr'){echo 'selected';}}?>>Jr</option>
-				      <option value="II" <?php if($ifupdate){if($dataarray['suffname']=='II'){echo 'selected';}}?>>II</option>
-				      <option value="III" <?php if($ifupdate){if($dataarray['suffname']=='III'){echo 'selected';}}?>>III</option>
-				      <option value="Iv" <?php if($ifupdate){if($dataarray['suffname']=='IV'){echo 'selected';}}?>>IV</option>
-				    </select>
-				  </div>
-				  <div class="col-md-5">
-				    <label for="bdate" class="form-label">Birth Date</label>
-				    <!-- <input type="hidden" name="hidbdate" value="0000-00-00"> -->
-				    <div class="input-group has-validation">
-				      <span class="input-group-text" id="inputGroupPrepend3" style="font-size: 15px;">📅</span>
-				      <input type="date" class="form-control input-data" id="bdate" name="bdate" value="<?php if($ifupdate){echo $dataarray['birthdate'];}?>" aria-describedby="validationServer03Feedback" required>
-				        <div class="valid-feedback">
-				          Looks good!
-				        </div>
-				        <div class="invalid-feedback">
-				          Input valid date.
-				        </div>
-				    </div>
-				  </div>			  
+				  	<label for="encounter" class="form-label">Type Encounter Here:</label>
+  					<textarea class="form-control input-data" id="encounter" rows="3" name="encounter" required></textarea>
+  				  </div>
 				  <div class="col-12">
 				    <button class="btn btn-primary submit-user add" type="submit"><?php if($ifupdate){echo 'Update';}else{echo 'Add';}?></button>
-				    <button type="button" class="btn btn-secondary back">Back</button>
+				    <button type="button" class="btn btn-secondary backpatient" id="<?php echo $dataid;?>">Back</button>
 				  </div>
 			</form>
 		</div>

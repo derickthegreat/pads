@@ -26,7 +26,10 @@ if ($_POST['action'] == 'home') {
 }elseif($_POST['action'] == 'addstatus'){
 	echo json_encode(AddPatientStatus($_POST['dataid'],$_POST['isadmitted'],$_POST['userid']));
 }elseif($_POST['action'] == 'addencounter'){
-	DisplayAddEncounter(0);
+	DisplayAddEncounter(0,$_POST['dataid'],$_POST['userid'],$_POST['psid']);
+}elseif($_POST['action'] == 'addnewencounter'){
+	$dataArray = [$_POST['encounterid'],$_POST['dataid'],$_POST['psid'],$_POST['encounter'],$_POST['userid']];
+	echo json_encode(UpdateEncounter($dataArray));
 }else{
 	echo 'none';
 }
